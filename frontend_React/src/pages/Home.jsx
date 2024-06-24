@@ -7,6 +7,7 @@ function Home() {
     const [city, setCity] = useState('');
     const [error, setError] = useState(null);
     const [weather, setWeather] = useState(null);
+    const [forecast, setForecast] = useState(null);
     const [articles, setArticles] = useState([]);
     const navigate = useNavigate();
 
@@ -15,12 +16,16 @@ function Home() {
             setError('Please enter a city name.');
             return;
         }
-
         try {
-            const response = await axios.get(`/api/${city}`);
-            const weatherData = response.data;
+            const weatherResponse = await axios.get(`/api/${city}`);
+            const forecastResponse = await axios.get(`/api/forecast/${city}`);
+
+            const weatherData = weatherResponse.data;
+            const forecastData = forecastResponse.data;
+
             setError(null);
             setWeather(weatherData);
+            setForecast(forecastData);
             // navigate('/weather', { state: { weather: weatherData } });
         } catch (err) {
             setError('Error fetching weather data. Please try again.');
@@ -144,30 +149,48 @@ function Home() {
                     </div>
                 )}
             </div>
+            <div className="w-1/2 p-4">
+            {forecast && forecast.list && (
+    <div className="bg-white p-8 rounded-lg shadow-md">
+        <h2 className="text-3xl font-semibold mb-2">5 Day Forecast for {forecast.city}</h2>
+        <div className="grid grid-cols-5 gap-4">
+            {forecast.list.map((item, index) => (
+                <div key={index} className="bg-gray-200 p-4 rounded-md">
+                    <p className="font-semibold">{item.date}</p>
+                    <WeatherSvg state={getWeatherIcon(item.description)} className="h-24 w-24 mr-2" />
+                    <p>{item.description}</p>
+                    <p>Temp: {item.temperature} °C</p>
+                    <p>Humidity: {item.humidity} %</p>
+                </div>
+            ))}
+        </div>
+    </div>
+)}
 
-
+    </div>
             <div className="w-1/2 p-4">
                 <h1 className="text-2xl font-bold mb-4">기후 변화 뉴스</h1>
                 {articles.length > 0 ? (
                     <ul>
-                    {articles.map((article, index) => (
-                        <li key={index} className="mb-4 flex">
-                            <img src={article.image} alt={article.title} className="w-24 h-24 mr-4 object-cover" />
-                            <div className="flex flex-col justify-between">
-                                <h2 className="text-xl mt-2 font-semibold">{article.title}</h2>
-                                <a href={article.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 mb-2">
-                                    Read more
-                                </a>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                        {articles.map((article, index) => (
+                            <li key={index} className="mb-4 flex">
+                                <img src={article.image} alt={article.title} className="w-24 h-24 mr-4 object-cover" />
+                                <div className="flex flex-col justify-between">
+                                    <h2 className="text-xl mt-2 font-semibold">{article.title}</h2>
+                                    <a href={article.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 mb-2">
+                                        자세히 보기
+                                    </a>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
                 ) : (
-                    <p>Loading climate news...</p>
+                    <p>기후 뉴스를 불러오는 중입니다...</p>
                 )}
             </div>
         </div>
     );
+    
 }
 
 export default Home;
