@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pj.web.entity.Forecast;
-import com.pj.web.entity.Forecast;
 import com.pj.web.entity.Weather;
 import com.pj.web.entity.WeatherNews;
 import com.pj.web.service.WeatherNewsService;
