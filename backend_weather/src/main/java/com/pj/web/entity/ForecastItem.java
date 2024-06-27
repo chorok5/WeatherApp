@@ -19,6 +19,7 @@ public class ForecastItem {
     private Double humidity;
     private String description;
     
+    // 수정 테스트
     
     @ManyToOne
     private Forecast forecast;
