@@ -8,14 +8,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pj.web.dto.AuthResponse;
+import com.pj.web.dto.LoginDTO;
 import com.pj.web.entity.Forecast;
 import com.pj.web.entity.Weather;
 import com.pj.web.entity.WeatherNews;
+import com.pj.web.service.AuthService;
 import com.pj.web.service.WeatherNewsService;
 import com.pj.web.service.WeatherService;
+
+import jakarta.security.auth.message.AuthException;
 
 @RestController
 @RequestMapping("/api")
@@ -26,6 +34,10 @@ public class WeatherController {
 
 	@Autowired
 	private WeatherNewsService weatherNewsService;
+	
+	
+    @Autowired
+    private AuthService authService;
 	
     @GetMapping("/weather/{city}")
     public ResponseEntity<Weather> getWeather(@PathVariable("city") String city) {
@@ -56,4 +68,9 @@ public class WeatherController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 	}
+	
+	
+
+	
+	
 }
