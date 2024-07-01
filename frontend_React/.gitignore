@@ -13,7 +13,8 @@ dist-ssr
 *.local
 
 frontend_React/
-
+backend_weather/
+README.md
 
 # Editor directories and files
 .vscode/*
