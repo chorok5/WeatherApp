@@ -18,7 +18,9 @@ public class WeatherNewsService {
 
     public List<WeatherNews> getAllWeatherNews() throws IOException  {
         List<WeatherNews> newsList = new ArrayList<>();
-        Document document = Jsoup.connect(NewsUrl).get();
+        Document document = Jsoup.connect(NewsUrl)
+                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")
+                .get();
         org.jsoup.select.Elements contents = document.select("section ul.type2 li");
 
         for (Element content : contents) {

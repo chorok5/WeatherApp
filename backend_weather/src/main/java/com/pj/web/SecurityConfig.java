@@ -16,6 +16,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorize -> authorize
+            		.requestMatchers("/api/news").permitAll()
                 .anyRequest().authenticated() // 모든 요청에 대해 인증 필요
             )
             .formLogin(formLogin -> formLogin // 기본 폼 로그인 설정
