@@ -36,7 +36,7 @@ function Home() {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const response = await axios.get('/api/news');
+                const response = await axios.get('/api/news',  { withCredentials: true });
                 const newsData = response.data;
                 setArticles(newsData);
             } catch (err) {
@@ -46,7 +46,6 @@ function Home() {
 
         fetchNews();
     }, []);
-
 
     const getWeatherIcon = (description) => {
         switch (description) {
