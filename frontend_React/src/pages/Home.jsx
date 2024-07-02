@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { WeatherSvg } from "weather-icons-animated";
+import Topbar from './Topbar';
 
 function Home() {
     const [city, setCity] = useState('');
@@ -17,7 +18,7 @@ function Home() {
             return;
         }
         try {
-            const weatherResponse = await axios.get(`/api/${city}`);
+            const weatherResponse = await axios.get(`/api/weather/${city}`);
             const forecastResponse = await axios.get(`/api/forecast/${city}`);
 
             const weatherData = weatherResponse.data;
@@ -35,7 +36,7 @@ function Home() {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const response = await axios.get('/api/news');
+                const response = await axios.get('/api/news',  { withCredentials: true });
                 const newsData = response.data;
                 setArticles(newsData);
             } catch (err) {
@@ -45,7 +46,6 @@ function Home() {
 
         fetchNews();
     }, []);
-
 
     const getWeatherIcon = (description) => {
         switch (description) {
@@ -116,10 +116,22 @@ function Home() {
         }
     };
 
+    const handleSignup = () => {
+        navigate('/signup');
+    };
+
+    const handleLogin = () => {
+        navigate('/login');
+    };
+
+
     return (
-        <div className="p-6 flex">
-            <div className="w-1/2 p-4">
+        <div className='flex'>
+            <Topbar handleSignup={handleSignup} handleLogin={handleLogin} />
+            <div className="grid grid-cols-3 w-full">
+                <div className="col-span-2 p-4">
                 <h1 className="text-2xl font-bold mb-4">Weather App</h1>
+                {/* 날씨 검색 부분 */}
                 <div className="mb-4">
                     <input
                         type="text"
@@ -132,6 +144,7 @@ function Home() {
                         Get Weather
                     </button>
                 </div>
+                {/* 날씨 정보 표시 부분 */}
                 {error && <p className="text-red-500">{error}</p>}
                 {weather && (
                     <div className="bg-white p-8 rounded-lg shadow-md">
@@ -148,27 +161,27 @@ function Home() {
                         </div>
                     </div>
                 )}
+                {/* 5일 예보 표시 부분 */}
+                {forecast && forecast.list && (
+                    <div className="mt-8 bg-white p-8 rounded-lg shadow-md"> {/* Add mt-8 for spacing */}
+                        <h2 className="text-3xl font-semibold mb-2">5 Day Forecast for {forecast.city}</h2>
+                        <div className="grid grid-cols-5 gap-4">
+                            {forecast.list.map((item, index) => (
+                                <div key={index} className="bg-gray-200 p-4 rounded-md">
+                                    <p className="font-semibold">{item.date}</p>
+                                    <WeatherSvg state={getWeatherIcon(item.description)} className="h-24 w-24 mr-2" />
+                                    <p>{item.description}</p>
+                                    <p>Temp: {item.temperature} °C</p>
+                                    <p>Humidity: {item.humidity} %</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
-            <div className="w-1/2 p-4">
-            {forecast && forecast.list && (
-    <div className="bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-3xl font-semibold mb-2">5 Day Forecast for {forecast.city}</h2>
-        <div className="grid grid-cols-5 gap-4">
-            {forecast.list.map((item, index) => (
-                <div key={index} className="bg-gray-200 p-4 rounded-md">
-                    <p className="font-semibold">{item.date}</p>
-                    <WeatherSvg state={getWeatherIcon(item.description)} className="h-24 w-24 mr-2" />
-                    <p>{item.description}</p>
-                    <p>Temp: {item.temperature} °C</p>
-                    <p>Humidity: {item.humidity} %</p>
-                </div>
-            ))}
-        </div>
-    </div>
-)}
 
-    </div>
-            <div className="w-1/2 p-4">
+            {/* 기후 뉴스 표시 부분 */}
+            <div className="col-span-1 p-4">
                 <h1 className="text-2xl font-bold mb-4">기후 변화 뉴스</h1>
                 {articles.length > 0 ? (
                     <ul>
@@ -189,8 +202,8 @@ function Home() {
                 )}
             </div>
         </div>
+    </div>
     );
-    
 }
 
 export default Home;
