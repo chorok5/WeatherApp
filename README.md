@@ -20,3 +20,4 @@
 - Tailwind css
 - Daisy UI
 - openweathermap
+- Spring Security
