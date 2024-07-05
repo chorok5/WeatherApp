@@ -74,7 +74,7 @@ public class WeatherService {
         // URI를 동적으로 생성
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(forecastUrl)
                 .queryParam("q", city)
-                .queryParam("lang", "kr")
+//                .queryParam("lang", "kr")
                 .queryParam("units", "metric")
                 .queryParam("appid", apiKey);
 
