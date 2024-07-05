@@ -34,9 +34,10 @@ function Home() {
     };
 
     useEffect(() => {
+
         const fetchNews = async () => {
             try {
-                const response = await axios.get('/api/news',  { withCredentials: true });
+                const response = await axios.get('/api/news', { withCredentials: true });
                 const newsData = response.data;
                 setArticles(newsData);
             } catch (err) {
@@ -46,6 +47,7 @@ function Home() {
 
         fetchNews();
     }, []);
+
 
     const getWeatherIcon = (description) => {
         switch (description) {
@@ -130,79 +132,80 @@ function Home() {
             <Topbar handleSignup={handleSignup} handleLogin={handleLogin} />
             <div className="grid grid-cols-3 w-full">
                 <div className="col-span-2 p-4">
-                <h1 className="text-2xl font-bold mb-4">Weather App</h1>
-                {/* 날씨 검색 부분 */}
-                <div className="mb-4">
-                    <input
-                        type="text"
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                        placeholder="Enter city name"
-                        className="border p-2 mr-2"
-                    />
-                    <button onClick={fetchWeather} className="bg-blue-500 text-white p-2 rounded">
-                        Get Weather
-                    </button>
-                </div>
-                {/* 날씨 정보 표시 부분 */}
-                {error && <p className="text-red-500">{error}</p>}
-                {weather && (
-                    <div className="bg-white p-8 rounded-lg shadow-md">
-                        <h2 className="text-3xl font-semibold mb-2">Weather for {weather.city}</h2>
-                        <div className="flex items-center mb-4">
-                            <div className="flex items-center">
-                                <WeatherSvg state={getWeatherIcon(weather.description)} className="h-24 w-24 mr-2" />
-                                <div>
-                                    <p className="text-lg font-semibold">{weather.description}</p>
-                                    <p className="text-gray-500">Temperature: {weather.temperature} °C</p>
-                                    <p className="text-gray-500">Humidity: {weather.humidity} %</p>
+                    <h1 className="text-2xl font-bold mb-4 mt-20">Weather App</h1>
+                    {/* 날씨 검색 부분 */}
+                    <div className="mb-4">
+                        <input
+                            type="text"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            placeholder="Enter city name"
+                            className="border p-2 mr-2"
+                        />
+                        <button onClick={fetchWeather} className="bg-blue-500 text-white p-2 rounded">
+                            Get Weather
+                        </button>
+                    </div>
+                    {/* 날씨 정보 표시 부분 */}
+                    {error && <p className="text-red-500">{error}</p>}
+                    {weather && (
+                        <div className="bg-white p-8 rounded-lg shadow-md">
+                            <h2 className="text-3xl font-semibold mb-2">Weather for {weather.city}</h2>
+                            <div className="flex items-center mb-4">
+                                <div className="flex items-center">
+                                    <WeatherSvg state={getWeatherIcon(weather.description)} className="h-24 w-24 mr-2" />
+                                    <div>
+                                        <p className="text-lg font-semibold">{weather.description}</p>
+                                        <p className="text-gray-500">기온 {weather.temperature} °C</p>
+                                        <p className="text-gray-500">습도 {weather.humidity} %</p>
+                                    </div>
                                 </div>
                             </div>
+                            <div className="hidden">{console.log(weather.description)}</div>
                         </div>
-                    </div>
-                )}
-                {/* 5일 예보 표시 부분 */}
-                {forecast && forecast.list && (
-                    <div className="mt-8 bg-white p-8 rounded-lg shadow-md"> {/* Add mt-8 for spacing */}
-                        <h2 className="text-3xl font-semibold mb-2">5 Day Forecast for {forecast.city}</h2>
-                        <div className="grid grid-cols-5 gap-4">
-                            {forecast.list.map((item, index) => (
-                                <div key={index} className="bg-gray-200 p-4 rounded-md">
-                                    <p className="font-semibold">{item.date}</p>
-                                    <WeatherSvg state={getWeatherIcon(item.description)} className="h-24 w-24 mr-2" />
-                                    <p>{item.description}</p>
-                                    <p>Temp: {item.temperature} °C</p>
-                                    <p>Humidity: {item.humidity} %</p>
-                                </div>
-                            ))}
+                    )}
+                    {/* 5일 예보 표시 부분 */}
+                    {forecast && forecast.list && (
+                        <div className="mt-8 bg-white p-8 rounded-lg shadow-md"> {/* Add mt-8 for spacing */}
+                            <h2 className="text-3xl font-semibold mb-12">5 Day Forecast for {forecast.city}</h2>
+                            <div className="grid grid-cols-5 gap-4">
+                                {forecast.list.map((item, index) => (
+                                    <div key={index} className="bg-gray-200 p-4 rounded-md">
+                                        <p className="font-semibold">{item.date}</p>
+                                        <WeatherSvg state={getWeatherIcon(item.description)} className="h-20 w-20 mr-2 pr-5" />
+                                        <p>{item.description}</p>
+                                        <p>{item.temperature} °C</p>
+                                        <p>{item.humidity} %</p>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                )}
-            </div>
+                    )}
+                </div>
 
-            {/* 기후 뉴스 표시 부분 */}
-            <div className="col-span-1 p-4">
-                <h1 className="text-2xl font-bold mb-4">기후 변화 뉴스</h1>
-                {articles.length > 0 ? (
-                    <ul>
-                        {articles.map((article, index) => (
-                            <li key={index} className="mb-4 flex">
-                                <img src={article.image} alt={article.title} className="w-24 h-24 mr-4 object-cover" />
-                                <div className="flex flex-col justify-between">
-                                    <h2 className="text-xl mt-2 font-semibold">{article.title}</h2>
-                                    <a href={article.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 mb-2">
-                                        자세히 보기
-                                    </a>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>기후 뉴스를 불러오는 중입니다...</p>
-                )}
+                {/* 기후 뉴스 표시 부분 */}
+                <div className="col-span-1 p-4">
+                    <h1 className="text-2xl font-bold mb-4 mt-20">기후 변화 뉴스</h1>
+                    {articles.length > 0 ? (
+                        <ul>
+                            {articles.map((article, index) => (
+                                <li key={index} className="mb-4 flex">
+                                    <img src={article.image} alt={article.title} className="w-24 h-24 mr-4 object-cover" />
+                                    <div className="flex flex-col justify-between">
+                                        <h2 className="text-xl mt-2 font-semibold">{article.title}</h2>
+                                        <a href={article.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 mb-2">
+                                            자세히 보기
+                                        </a>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>기후 뉴스를 불러오는 중입니다...</p>
+                    )}
+                </div>
             </div>
         </div>
-    </div>
     );
 }
 
