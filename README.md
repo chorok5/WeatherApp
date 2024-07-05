@@ -1,6 +1,7 @@
-## ⛅ WeatherApp (2024.06.20 ~ 진행중)
+## ⛅ WeatherApp (진행중)
 - 날씨 api를 활용하여 날씨를 출력해보자!
 - 세계 기후 이변에 대한 정보를 제공하자!
+- 로그인 기능 구현하기
 
 ## ⛅ 기술 스택 선택 이유
 | 분야     | 기술 스택       | 선택 이유                                                                |
@@ -19,3 +20,4 @@
 - Tailwind css
 - Daisy UI
 - openweathermap
+- Spring Security
